@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poor+Story&display=swap" rel="stylesheet">
+    <style>
+        .wrap {
+            width: 500px;
+            margin: auto;
+        }
+
+        * {
+            font-family: 'Poor Story', cursive;
+        }
+
+        .picture {
+            background-image: url("http://touchwarmer.com/web/product/big/201904/ece2b7c23ac8533c7ea3a8d4a4333ee4.jpg");
+            background-size: cover;
+            background-position: center;
+            width: 500px;
+            height: 500px;
+        }
+
+        .productName {
+            display: inline;
+        }
+
+        .price {
+            display: inline;
+        }
+
+
+        .order {
+            width: 500px;
+        }
+
+
+        .btn {
+            background-color: cornflowerblue;
+            color: white;
+            border-color: cornflowerblue;
+            border-radius: 5px;
+            padding: 6px;
+            display: block;
+            margin: 15px auto;
+
+        }
+    </style>
+
+</head>
+
+<body>
+<div class="wrap">
+    <div class="picture">
+        <p></p>
+    </div>
+
+    <div class="product">
+        <h2 class="productName">양키캔들 라지자 아로마 향초 체리블라썸</h2>
+        <h5 class="price">판매가: 17,760원</h5>
+        <p>봄의 생기가 느껴지는 벚꽃의 은은하고 사랑스러운 향</p>
+    </div>
+
+    <div class="order">
+        <h2>주문하기</h2>
+        <div class="form-inline">
+            <label for="inputName" class="sr-only">주문자 성함:</label>
+            <input type="text" class="form-control" id="inputName" placeholder="">
+        </div>
+
+        <div class="form-inline">
+            <label for="inputAmount">수량:</label>
+            <select class="form-control" id="inputAmount">
+                <option>--수량을 선택하세요--</option>
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+            </select>
+        </div>
+
+        <div class="form-inline">
+            <label for="inputAdress" class="sr-only">주소:</label>
+            <input type="text" class="form-control" id="inputAdress" placeholder="">
+        </div>
+        <div class="form-inline">
+            <label for="inputNumber" class="sr-only">전화번호:</label>
+            <input type="text" class="form-control" id="inputNumber" placeholder="">
+        </div>
+
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroup-sizing-default">Default</span>
+            </div>
+            <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+        </div>
+
+    </div>
+
+    <button type="button" class="btn" onclick="alert('주문이 완료되었습니다.')">주문하기</button>
+
+</div>
+
+</body>
+</html>
