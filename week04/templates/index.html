@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="ko">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+
+    <title>week02 homework</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poor+Story&display=swap" rel="stylesheet">
+    <style>
+        .wrap {
+            width: 600px;
+            margin: auto;
+        }
+
+        * {
+            font-family: 'Poor Story', cursive;
+        }
+
+        .picture {
+            background-image: url("http://touchwarmer.com/web/product/big/201904/ece2b7c23ac8533c7ea3a8d4a4333ee4.jpg");
+            background-size: cover;
+            background-position: center;
+            width: 500px;
+            height: 500px;
+        }
+
+        .productName {
+            display: inline;
+        }
+
+        .price {
+            display: inline;
+        }
+
+        .order {
+            width: 600px;
+        }
+
+        .orderBtn {
+            display: block;
+            margin: 15px auto;
+        }
+
+        .rate {
+            color: blue;
+        }
+
+
+    </style>
+    <script>
+        $(document).ready(function () {
+            $("#order-box").html("");
+            showOrder();
+        });
+
+
+        function order() {
+            const name = $('#name').val();
+            const cnt = $('#inputGroupSelect01 option:selected').val();
+            const address = $('#adress').val();
+            const number = $('#number').val();
+
+            if (name === '') {
+                alert('이름을 입력하세요');
+                $('#name').focus();
+                return;
+            } else if (cnt === "default") {
+                alert('수량을 선택하세요');
+                return;
+            } else if (address === '') {
+                alert('주소를 입력하세요');
+                $('#adress').focus();
+                return;
+            } else if (number === '') {
+                alert('전화번호를 입력하세요');
+                $('#number').focus();
+                return;
+            } else if (!/010-?\d{3,4}-?\d{4}/.test(number)) {
+                alert('wrong number');
+                $('#number').focus();
+                return;
+            }
+            // 3. POST /review 에 저장을 요청합니다.
+            $.ajax({
+                type: "POST",
+                url: "/order",
+                data: {
+                    'name_give': name,
+                    'cnt_give': cnt,
+                    'address_give': address,
+                    'number_give': number
+                },
+                success: function (response) {
+                    if (response["result"] == "success") {
+                        alert(response["msg"]);
+                        window.location.reload();
+                    }
+                }
+            })
+
+
+        }
+
+        function showOrder() {
+            $.ajax({
+                type: "GET",
+                url: "/order",
+                data: {},
+                success: function (response) {
+                    if (response["result"] == "success") {
+                        let orders = response['orders']
+                        for (let i = 0; i < orders.length; i++) {
+                            let name = orders[i]['name'];
+                            let cnt = orders[i]['cnt'];
+                            let address = orders[i]['address'];
+                            let number = orders[i]['number'];
+                            let tempHtml = `<tr>
+                                                <td> ${name}</td>
+                                                <td>${cnt}</td>
+                                                <td>${address}</td>
+                                                <td>${number}</td>
+                                            </tr>`
+
+                            $('#order-box').append(tempHtml);
+                        }
+
+                    } else {
+                        alert("주문정보를 받아오지 못했습니다");
+                    }
+                }
+            })
+
+        }
+
+        $(document).ready(function () {
+            $.ajax({
+                type: "GET",
+                url: "https://api.manana.kr/exchange/rate.json",
+                data: {},
+                success: function (response) {
+                    let rateInfo = response[1]['rate'];
+                    let tempHtml = `달러-원 환율:${rateInfo}`;
+                    $('#rate').append(tempHtml);
+                }
+            })
+        });
+
+
+    </script>
+
+</head>
+
+<body>
+<div class="wrap">
+    <div class="picture">
+        <p></p>
+    </div>
+
+    <div class="product">
+        <h2 class="productName">양키캔들 라지자 아로마 향초 체리블라썸</h2>
+        <h5 class="price">판매가: 17,760원</h5>
+        <p>봄의 생기가 느껴지는 벚꽃의 은은하고 사랑스러운 향</p>
+    </div>
+
+    <div class="rate" id="rate">
+
+    </div>
+
+    <div class="order">
+        <h4>주문하기</h4>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroup-sizing-default">주문자 이름</span>
+            </div>
+            <input type="text" id="name" class="form-control" aria-label="Default"
+                   aria-describedby="inputGroup-sizing-default">
+        </div>
+
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <label class="input-group-text" for="inputGroupSelect01">수량</label>
+            </div>
+            <select class="custom-select" id="inputGroupSelect01">
+                <option selected value="default">--수량을 선택하세요--</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="3">4</option>
+                <option value="3">5</option>
+            </select>
+        </div>
+
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroup-sizing-default2">주소</span>
+            </div>
+            <input type="text" id="adress" class="form-control" aria-label="Default"
+                   aria-describedby="inputGroup-sizing-default2">
+        </div>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroup-sizing-default3">전화번호</span>
+            </div>
+            <input type="text" id="number" class="form-control" aria-label="Default"
+                   aria-describedby="inputGroup-sizing-default3">
+        </div>
+    </div>
+
+    <button type="button" class="btn btn-primary orderBtn" onclick="order()">주문하기</button>
+
+    <div class="orderList">
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">이름</th>
+                <th scope="col">수량</th>
+                <th scope="col">주소</th>
+                <th scope="col">전화번호</th>
+            </tr>
+            </thead>
+            <tbody id="order-box">
+            <tr>
+                <th scope="row">1</th>
+                <td>Mark</td>
+                <td>Otto</td>
+                <td>@mdo</td>
+            </tr>
+            <tr>
+                <th scope="row">2</th>
+                <td>Jacob</td>
+                <td>Thornton</td>
+                <td>@fat</td>
+            </tr>
+            <tr>
+                <th scope="row">3</th>
+                <td>Larry</td>
+                <td>the Bird</td>
+                <td>@twitter</td>
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+
+</div>
+
+</body>
+
+
+</html>
